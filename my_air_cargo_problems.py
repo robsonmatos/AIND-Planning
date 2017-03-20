@@ -65,7 +65,7 @@ class AirCargoProblem(Problem):
                                        expr("At({}, {})".format(plane, airport))]
                         precond_neg = []
                         effect_add = [expr("In({}, {})".format(cargo, plane))]
-                        effect_rem = expr("At({}, {})".format(cargo, plane))
+                        effect_rem = [expr("At({}, {})".format(cargo, plane))]
                         load = Action(expr("Load({}, {}, {})".format(cargo, plane, airport)),
                                       [precond_pos, precond_neg],
                                       [effect_add, effect_rem])
@@ -153,7 +153,7 @@ class AirCargoProblem(Problem):
         :param action: Action applied
         :return: resulting state after action
         """
-        #
+
         # if action not in self.actions(state):
         #     return state
 
@@ -170,6 +170,12 @@ class AirCargoProblem(Problem):
         for fluent in action.effect_add:
             if fluent not in new_state.pos:
                 new_state.pos.append(fluent)
+        for fluent in old_state.neg:
+            if fluent not in action.effect_add:
+                new_state.neg.append(fluent)
+        for fluent in action.effect_rem:
+            if fluent not in new_state.neg:
+                new_state.neg.append(fluent)
         return encode_state(new_state, self.state_map)
 
     def goal_test(self, state: str) -> bool:
@@ -257,8 +263,8 @@ def air_cargo_p2() -> AirCargoProblem:
            expr('At(C3, ATL)'),
            expr('At(P1, SFO)'),
            expr('At(P2, JFK)'),
-           expr('At(P3, ATL)')]
-
+           expr('At(P3, ATL)'),
+           ]
     neg = [expr('At(C1, JFK)'),
            expr('At(C1, ATL)'),
            expr('In(C1, P1)'),
@@ -271,8 +277,8 @@ def air_cargo_p2() -> AirCargoProblem:
            expr('In(C2, P2)'),
            expr('In(C2, P3)'),
 
-           expr('At(C3, JFK)'),
            expr('At(C3, SFO)'),
+           expr('At(C3, JFK)'),
            expr('In(C3, P1)'),
            expr('In(C3, P2)'),
            expr('In(C3, P3)'),
@@ -281,17 +287,16 @@ def air_cargo_p2() -> AirCargoProblem:
            expr('At(P1, ATL)'),
 
            expr('At(P2, SFO)'),
-           expr('At(P1, ATL)'),
+           expr('At(P2, ATL)'),
 
-           expr('At(P1, SFO)'),
-           expr('At(P3, JFK)')]
-
+           expr('At(P3, SFO)'),
+           expr('At(P3, JFK)'),
+           ]
     init = FluentState(pos, neg)
-
     goal = [expr('At(C1, JFK)'),
             expr('At(C2, SFO)'),
-            expr('At(C3, SFO)')]
-
+            expr('At(C3, SFO)'),
+            ]
     return AirCargoProblem(cargos, planes, airports, init, goal)
 
 
