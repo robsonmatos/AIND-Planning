@@ -65,7 +65,7 @@ class AirCargoProblem(Problem):
                                        expr("At({}, {})".format(plane, airport))]
                         precond_neg = []
                         effect_add = [expr("In({}, {})".format(cargo, plane))]
-                        effect_rem = [expr("At({}, {})".format(cargo, plane))]
+                        effect_rem = [expr("At({}, {})".format(cargo, airport))]
                         load = Action(expr("Load({}, {}, {})".format(cargo, plane, airport)),
                                       [precond_pos, precond_neg],
                                       [effect_add, effect_rem])
@@ -153,9 +153,6 @@ class AirCargoProblem(Problem):
         :param action: Action applied
         :return: resulting state after action
         """
-
-        # if action not in self.actions(state):
-        #     return state
 
         new_state = FluentState([], [])
         old_state = decode_state(state, self.state_map)
