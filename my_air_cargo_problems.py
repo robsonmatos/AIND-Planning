@@ -34,7 +34,7 @@ class AirCargoProblem(Problem):
         self.actions_list = self.get_actions()
 
     def get_actions(self):
-        '''
+        """
         This method creates concrete actions (no variables) for all actions in the problem
         domain action schema and turns them into complete Action objects as defined in the
         aimacode.planning module. It is computationally expensive to call this method directly;
@@ -44,7 +44,7 @@ class AirCargoProblem(Problem):
         ----------
         list<Action>
             list of Action objects
-        '''
+        """
 
         # TODO create concrete Action objects based on the domain action schema for: Load, Unload, and Fly
         # concrete actions definition: specific literal action that does not include variables as with the schema
@@ -53,10 +53,10 @@ class AirCargoProblem(Problem):
         # forward search and Planning Graphs must use Propositional Logic
 
         def load_actions():
-            '''Create all concrete Load actions and return a list
+            """Create all concrete Load actions and return a list
 
             :return: list of Action objects
-            '''
+            """
             loads = []
             for cargo in self.cargos:
                 for plane in self.planes:
@@ -73,10 +73,10 @@ class AirCargoProblem(Problem):
             return loads
 
         def unload_actions():
-            '''Create all concrete Unload actions and return a list
+            """Create all concrete Unload actions and return a list
 
             :return: list of Action objects
-            '''
+            """
             unloads = []
             for cargo in self.cargos:
                 for plane in self.planes:
@@ -93,10 +93,10 @@ class AirCargoProblem(Problem):
             return unloads
 
         def fly_actions():
-            '''Create all concrete Fly actions and return a list
+            """Create all concrete Fly actions and return a list
 
             :return: list of Action objects
-            '''
+            """
             flys = []
             for fr in self.airports:
                 for to in self.airports:
@@ -160,7 +160,6 @@ class AirCargoProblem(Problem):
         # Find the next state resulting from applying action "a" to state "s". In order to do so, we start with the
         # fluents of "s", then remove the fluents that appears as negative literals in the "a"'s effects, and finally
         # add the fluents that appears as positive literals in "a"'s effects.
-        # Please notice that, according to AIMA, a negation fluent is not allowed in a given state.
         for fluent in old_state.pos:
             if fluent not in action.effect_rem:
                 new_state.pos.append(fluent)
